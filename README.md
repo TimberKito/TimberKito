@@ -4,3 +4,9 @@
 
 **Hi~ I'm Timber, a college student from Chong Qing, China.**
 
+**I'm learning**：
+
+- Java
+- JavaScript
+- Spring
+- Vue
