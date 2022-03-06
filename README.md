@@ -8,7 +8,8 @@
 - JavaScript
 - Spring
 - Vue
-
+- MySql
+- Redis
 <img align="right" width="400px" src="https://github-readme-stats.vercel.app/api?username=TimberKito&show_icons=true&hide_title=true" />
 
 👨‍💻**Tools and Environments**
