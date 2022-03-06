@@ -3,7 +3,7 @@
 
 ✍**Hi~ I'm Timber, a college student from Chong Qing, China.**
 
-🌱**learning Languages and Frameworks**：
+🌱**learning Languages and Frameworks**
 - Java
 - JavaScript
 - Spring
