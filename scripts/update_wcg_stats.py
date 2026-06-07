@@ -61,15 +61,6 @@ def existing_stats(content):
     return stats
 
 
-def badge(label, value):
-    encoded_label = label.replace("-", "--").replace(" ", "%20")
-    encoded_value = value.replace("-", "--").replace(" ", "%20")
-    return (
-        f"![{label}](https://img.shields.io/badge/"
-        f"{encoded_label}-{encoded_value}-00a1e0?style=flat-square)"
-    )
-
-
 def get_stats(fallback):
     stats = fallback.copy()
 
@@ -99,13 +90,6 @@ def render(stats):
     return "\n".join(
         [
             START_MARKER,
-            (
-                f"[![WCG User](https://img.shields.io/badge/WCG-{MEMBER_NAME}"
-                f"-00a1e0?style=flat-square)]({MEMBER_URL})"
-            ),
-            badge("BOINC Total Credit", stats["total_credit"]),
-            badge("BOINC RAC", stats["recent_credit"]),
-            "",
             "| 数据 | 当前值 |",
             "| --- | ---: |",
             f'| WCG 总运行时长 `(y:d:h:m:s)` | `{stats["runtime"]}` |',
@@ -123,11 +107,30 @@ def render(stats):
     )
 
 
+def split_update_region(content):
+    if START_MARKER in content and END_MARKER in content:
+        before, remainder = content.split(START_MARKER, 1)
+        _, after = remainder.split(END_MARKER, 1)
+        return before, after
+
+    section_start = content.find("### World Community Grid")
+    table_start = content.find("| 数据 | 当前值 |", section_start)
+    if section_start == -1 or table_start == -1:
+        raise ValueError("README is missing the World Community Grid statistics table")
+
+    end_marker = content.find(END_MARKER, table_start)
+    if end_marker != -1:
+        after = content[end_marker + len(END_MARKER) :]
+    else:
+        next_section = content.find("\n### ", table_start)
+        after = content[next_section:] if next_section != -1 else "\n"
+    return content[:table_start], after
+
+
 def main():
     readme = Path(__file__).resolve().parents[1] / "README.md"
     content = readme.read_text(encoding="utf-8")
-    before, remainder = content.split(START_MARKER, 1)
-    _, after = remainder.split(END_MARKER, 1)
+    before, after = split_update_region(content)
     readme.write_text(
         before + render(get_stats(existing_stats(content))) + after,
         encoding="utf-8",
