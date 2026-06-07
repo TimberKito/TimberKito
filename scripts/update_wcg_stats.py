@@ -9,7 +9,6 @@ from xml.etree import ElementTree
 
 MEMBER_NAME = "Timberkito"
 MEMBER_ID = "1183020"
-CPID = "96bdbc1a1a4483a4348499612c80dd90"
 MEMBER_URL = (
     "https://www.worldcommunitygrid.org/stat/"
     f"viewMemberInfo.do?userName={MEMBER_NAME}"
@@ -118,7 +117,7 @@ def render(stats):
             f'| BOINC Recent Average Credit | `{stats["recent_credit"]}` |',
             f'| 注册日期 | `{stats["registered"]}` |',
             "",
-            f"账号 ID：`{MEMBER_ID}` · CPID：`{CPID}`",
+            f"账号 ID：`{MEMBER_ID}`",
             END_MARKER,
         ]
     )

@@ -47,5 +47,5 @@
 | BOINC Recent Average Credit | `162.90` |
 | 注册日期 | `06/05/2026` |
 
-账号 ID：`1183020` · CPID：`96bdbc1a1a4483a4348499612c80dd90`
+账号 ID：`1183020`
 <!-- WCG-STATS:END -->
