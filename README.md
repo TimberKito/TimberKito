@@ -33,18 +33,19 @@
 
 <!-- WCG-STATS:START -->
 [![WCG User](https://img.shields.io/badge/WCG-Timberkito-00a1e0?style=flat-square)](https://www.worldcommunitygrid.org/stat/viewMemberInfo.do?userName=Timberkito)
-![BOINC Total Credit](https://img.shields.io/badge/BOINC%20Total%20Credit-222.78-00a1e0?style=flat-square)
-![BOINC RAC](https://img.shields.io/badge/BOINC%20RAC-93.42-00a1e0?style=flat-square)
+![BOINC Total Credit](https://img.shields.io/badge/BOINC%20Total%20Credit-1080.54-00a1e0?style=flat-square)
+![BOINC RAC](https://img.shields.io/badge/BOINC%20RAC-162.90-00a1e0?style=flat-square)
 
 | 数据 | 当前值 |
 | --- | ---: |
-| WCG 总运行时长 `(y:d:h:m:s)` | `-:---:--:--:--` |
-| WCG 生成积分 | `0` |
-| WCG 已返回结果 | `0` |
+| WCG 总运行时长 `(y:d:h:m:s)` | `0:000:11:07:55 (#779,145)` |
+| WCG 生成积分 | `3,560 (#692,241)` |
+| WCG 已返回结果 | `7 (#708,960)` |
 | 最近返回结果 | `Never` |
 | 设备安装数 | `0` |
-| BOINC Total Credit | `222.78` |
-| BOINC Recent Average Credit | `93.42` |
+| BOINC Total Credit | `1080.54` |
+| BOINC Recent Average Credit | `162.90` |
 | 注册日期 | `06/05/2026` |
 
+账号 ID：`1183020` · CPID：`96bdbc1a1a4483a4348499612c80dd90`
 <!-- WCG-STATS:END -->
