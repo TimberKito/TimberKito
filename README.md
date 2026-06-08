@@ -25,4 +25,4 @@
 
 通过 World Community Grid 贡献闲置算力，参与公共科学计算项目。
 
-<iframe src="https://www.worldcommunitygrid.org/getDynamicImage.do?memberName=Timberkito&mnOn=true&stat=1&imageNum=1&rankOn=true&projectsOn=true&special=true&link=1&memberId=1183020" frameborder="0" name="di" scrolling="no" width="405px" height="190px"></iframe>
+[![Timberkito's World Community Grid statistics](assets/world-community-grid.png)](https://www.worldcommunitygrid.org/stat/viewMemberInfo.do?userName=Timberkito)
