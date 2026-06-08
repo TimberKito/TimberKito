@@ -25,17 +25,4 @@
 
 通过 World Community Grid 贡献闲置算力，参与公共科学计算项目。
 
-<!-- WCG-STATS:START -->
-| 数据 | 当前值 |
-| --- | ---: |
-| WCG 总运行时长 `(y:d:h:m:s)` | `0:000:11:07:55 (#779,145)` |
-| WCG 生成积分 | `3,560 (#692,241)` |
-| WCG 已返回结果 | `7 (#708,960)` |
-| 最近返回结果 | `Never` |
-| 设备安装数 | `0` |
-| BOINC Total Credit | `1080.54` |
-| BOINC Recent Average Credit | `162.90` |
-| 注册日期 | `06/05/2026` |
-
-账号 ID：`1183020`
-<!-- WCG-STATS:END -->
+<iframe src="https://www.worldcommunitygrid.org/getDynamicImage.do?memberName=Timberkito&mnOn=true&stat=1&imageNum=1&rankOn=true&projectsOn=true&special=true&link=1&memberId=1183020" frameborder="0" name="di" scrolling="no" width="405px" height="190px"></iframe>
