@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
-from html import escape
 from html.parser import HTMLParser
 from pathlib import Path
-import re
-import textwrap
+import os
+import shutil
+import struct
+import subprocess
+import tempfile
 from urllib.request import Request, urlopen
 
 
@@ -15,8 +17,9 @@ WIDGET_URL = (
     f"?memberName={MEMBER_NAME}&mnOn=true&stat=1&imageNum=1"
     f"&rankOn=true&projectsOn=true&special=true&link=1&memberId={MEMBER_ID}"
 )
+CARD_SIZE = (406, 208)
 OUTPUT_PATH = (
-    Path(__file__).resolve().parents[1] / "assets" / "world-community-grid.svg"
+    Path(__file__).resolve().parents[1] / "assets" / "world-community-grid.png"
 )
 
 
@@ -42,79 +45,94 @@ class WidgetParser(HTMLParser):
             self.items.append(text)
 
 
-def fetch_widget():
+def fetch_stats_text():
     request = Request(
         WIDGET_URL,
-        headers={"User-Agent": "TimberKito-GitHub-Profile/2.0"},
+        headers={"User-Agent": "TimberKito-GitHub-Profile/3.0"},
     )
     with urlopen(request, timeout=30) as response:
-        return response.read().decode("iso-8859-1")
+        content = response.read().decode("iso-8859-1")
 
-
-def parse_widget(content):
     parser = WidgetParser()
     parser.feed(content)
-
     try:
         member_index = parser.items.index(MEMBER_NAME)
-        stats_text = parser.items[member_index + 1]
-        projects_index = parser.items.index("Help projects like:")
-        projects = parser.items[projects_index + 1]
+        return parser.items[member_index + 1].removeprefix(":").strip()
     except (ValueError, IndexError) as error:
         raise ValueError("WCG widget did not contain the expected member data") from error
 
-    match = re.fullmatch(
-        r":\s*([\d,]+)\s+Points\s+\(Rank:\s*#([\d,]+)\)",
-        stats_text,
-    )
-    if not match:
-        raise ValueError(f"Unexpected WCG statistics format: {stats_text!r}")
 
-    return {
-        "member": MEMBER_NAME,
-        "points": match.group(1),
-        "rank": match.group(2),
-        "projects": projects,
-    }
+def find_chrome():
+    configured_path = os.environ.get("CHROME_PATH")
+    candidates = [
+        configured_path,
+        shutil.which("google-chrome"),
+        shutil.which("google-chrome-stable"),
+        shutil.which("chromium"),
+        shutil.which("chromium-browser"),
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+    ]
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return Path(candidate)
+    raise FileNotFoundError("Chrome or Chromium was not found")
 
 
-def render_card(stats):
-    project_lines = textwrap.wrap(
-        stats["projects"],
-        width=76,
-        break_long_words=False,
-        break_on_hyphens=False,
-    )[:2]
-    projects_svg = "\n".join(
-        f'<tspan x="42" dy="{0 if index == 0 else 20}">{escape(line)}</tspan>'
-        for index, line in enumerate(project_lines)
-    )
+def png_size(path):
+    with path.open("rb") as image:
+        header = image.read(24)
+    if header[:8] != b"\x89PNG\r\n\x1a\n" or header[12:16] != b"IHDR":
+        raise ValueError("Chrome did not produce a valid PNG")
+    return struct.unpack(">II", header[16:24])
 
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="720" height="260" viewBox="0 0 720 260" role="img" aria-labelledby="title description">
-  <title id="title">{escape(stats["member"])} World Community Grid statistics</title>
-  <desc id="description">{escape(stats["points"])} points, rank {escape(stats["rank"])}</desc>
-  <rect x="1" y="1" width="718" height="258" rx="14" fill="#ffffff" stroke="#d0d7de" stroke-width="2"/>
-  <circle cx="62" cy="62" r="29" fill="none" stroke="#161616" stroke-width="4"/>
-  <circle cx="51" cy="69" r="21" fill="none" stroke="#161616" stroke-width="4"/>
-  <circle cx="44" cy="77" r="13" fill="none" stroke="#161616" stroke-width="4"/>
-  <text x="108" y="71" fill="#161616" font-family="Arial, sans-serif" font-size="30" font-weight="600">World Community Grid</text>
-  <line x1="42" y1="104" x2="678" y2="104" stroke="#d0d7de"/>
-  <text x="42" y="144" fill="#0969da" font-family="Arial, sans-serif" font-size="20" font-weight="600">{escape(stats["member"])}</text>
-  <text x="42" y="181" fill="#161616" font-family="Arial, sans-serif" font-size="30" font-weight="700">{escape(stats["points"])} Points</text>
-  <text x="300" y="181" fill="#57606a" font-family="Arial, sans-serif" font-size="18">Global rank #{escape(stats["rank"])}</text>
-  <text x="42" y="216" fill="#57606a" font-family="Arial, sans-serif" font-size="15">{projects_svg}</text>
-</svg>
-"""
+
+def capture_widget(chrome):
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="wcg-chrome-") as profile:
+        screenshot_path = Path(profile) / OUTPUT_PATH.name
+        command = [
+            str(chrome),
+            "--headless",
+            "--no-sandbox",
+            "--disable-gpu",
+            "--disable-background-networking",
+            "--disable-component-update",
+            "--disable-sync",
+            "--hide-scrollbars",
+            "--no-first-run",
+            "--force-device-scale-factor=1",
+            f"--window-size={CARD_SIZE[0]},{CARD_SIZE[1]}",
+            "--virtual-time-budget=5000",
+            f"--user-data-dir={profile}",
+            f"--screenshot={screenshot_path}",
+            WIDGET_URL,
+        ]
+        result = subprocess.run(
+            command,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=60,
+            check=False,
+        )
+        if result.returncode:
+            raise RuntimeError(
+                f"Chrome screenshot failed with exit code {result.returncode}"
+            )
+
+        actual_size = png_size(screenshot_path)
+        if actual_size != CARD_SIZE:
+            raise ValueError(
+                f"Unexpected screenshot size: {actual_size}; expected {CARD_SIZE}"
+            )
+        shutil.copyfile(screenshot_path, OUTPUT_PATH)
 
 
 def main():
-    stats = parse_widget(fetch_widget())
-    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_PATH.write_text(render_card(stats), encoding="utf-8", newline="\n")
-    print(
-        f'Updated {OUTPUT_PATH.name}: {stats["points"]} points, '
-        f'rank #{stats["rank"]}'
-    )
+    stats_text = fetch_stats_text()
+    chrome = find_chrome()
+    capture_widget(chrome)
+    print(f"Updated {OUTPUT_PATH.name} from WCG official widget: {stats_text}")
 
 
 if __name__ == "__main__":
