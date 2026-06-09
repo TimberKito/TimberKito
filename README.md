@@ -27,4 +27,6 @@
 
 通过 World Community Grid 贡献闲置算力，参与公共科学计算项目。
 
-[![Timberkito's World Community Grid statistics](assets/world-community-grid.png)](https://www.worldcommunitygrid.org/stat/viewMemberInfo.do?userName=Timberkito)
+[![Timberkito's World Community Grid statistics](assets/world-community-grid.svg)](https://www.worldcommunitygrid.org/stat/viewMemberInfo.do?userName=Timberkito)
+
+<sub>统计数据由 GitHub Actions 每日自动同步。</sub>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="260" viewBox="0 0 720 260" role="img" aria-labelledby="title description">
+  <title id="title">Timberkito World Community Grid statistics</title>
+  <desc id="description">16,157 points, rank 563,714</desc>
+  <rect x="1" y="1" width="718" height="258" rx="14" fill="#ffffff" stroke="#d0d7de" stroke-width="2"/>
+  <circle cx="62" cy="62" r="29" fill="none" stroke="#161616" stroke-width="4"/>
+  <circle cx="51" cy="69" r="21" fill="none" stroke="#161616" stroke-width="4"/>
+  <circle cx="44" cy="77" r="13" fill="none" stroke="#161616" stroke-width="4"/>
+  <text x="108" y="71" fill="#161616" font-family="Arial, sans-serif" font-size="30" font-weight="600">World Community Grid</text>
+  <line x1="42" y1="104" x2="678" y2="104" stroke="#d0d7de"/>
+  <text x="42" y="144" fill="#0969da" font-family="Arial, sans-serif" font-size="20" font-weight="600">Timberkito</text>
+  <text x="42" y="181" fill="#161616" font-family="Arial, sans-serif" font-size="30" font-weight="700">16,157 Points</text>
+  <text x="300" y="181" fill="#57606a" font-family="Arial, sans-serif" font-size="18">Global rank #563,714</text>
+  <text x="42" y="216" fill="#57606a" font-family="Arial, sans-serif" font-size="15"><tspan x="42" dy="0">Mapping Arthritis Markers, OpenPandemics - COVID-19, Africa Rainfall</tspan>
+<tspan x="42" dy="20">Project, Mapping Cancer Markers</tspan></text>
+</svg>
